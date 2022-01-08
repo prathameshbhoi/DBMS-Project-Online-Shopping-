@@ -1,0 +1,182 @@
+<?php
+// Start Session
+session_start();
+// Get data from the users
+if(isset($_POST["login"]) && isset($_POST["email"]) && isset($_POST["password"]) )
+{
+$email = $_POST["email"];
+$password1 = $_POST["password"];
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "dbms";
+$message=" ";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+// Check connection
+if (!$conn) {
+ die("Connection failed: " . mysqli_connect_error());
+}
+
+$sql="SELECT * FROM ACCOUNT WHERE LOGIN='$email' AND PASSWORD='$password1';";
+
+$result = mysqli_query($conn, $sql);
+
+$row = mysqli_fetch_array($result);
+print_r($row);
+//row [username,password ,usertype]
+if (is_array($row)) {
+ $_SESSION["username"] = $row['LOGIN'];
+ echo $_SESSION["username"];
+
+ if ((isset($_SESSION["username"])) ) {
+ echo "Success";
+ header("Location:dispcust.php");
+}
+
+}
+else {
+ $message = "Invalid Username or Password!";
+ echo "<script type='text/javascript'>alert('$message');</script>";
+}
+}
+
+?>
+<!-- HTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>My Site | Login</title>
+ <style>
+  * {
+  margin: 0px;
+  padding: 0px;
+}
+body{
+      background-image: url("images/index.jpg");
+      height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 30px;
+  font-size: 120%;
+    }
+
+.header {
+  width: 30%;
+  margin: 50px auto 0px;
+  color: white;
+  background: #5F9EA0;
+  text-align: center;
+  border: 1px solid #B0C4DE;
+  border-bottom: none;
+  border-radius: 10px 10px 0px 0px;
+  padding: 20px;
+}
+form, .content {
+  width: 30%;
+  margin: 0px auto;
+  padding: 20px;
+  border: 1px solid #B0C4DE;
+  background: white;
+  border-radius: 0px 0px 10px 10px;
+}
+.input-group {
+  margin: 10px 0px 10px 0px;
+}
+.input-group label {
+  display: block;
+  text-align: left;
+  margin: 3px;
+}
+.input-group input {
+  height: 30px;
+  width: 93%;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+.btn{
+  padding: 10px;
+  font-size: 15px;
+  color: white;
+  background: #086972;
+  border: solid black;
+  border-radius: 34px;
+  margin-top: 20px;
+  width: 101px;
+  height: 50px;
+  font-size: 21px;
+}
+
+.error {
+  width: 92%;
+  margin: 0px auto;
+  padding: 10px;
+  border: 1px solid #a94442;
+  color: #a94442;
+  background: #f2dede;
+  border-radius: 5px;
+  text-align: left;
+}
+select{
+  width: 50%;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 20px;
+  }
+.col-md-8{
+    background: #f2a51a;
+    padding: 4%;
+    margin-left: 460px;
+    margin-right: 460px;
+    border-radius: 10px;
+  }
+  </style>
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <link rel="stylesheet" href="styles.css">
+      <link href="https://fonts.googleapis.com/css?family=Montserrat:900" rel="stylesheet">
+</head>
+<body>
+
+ <center>
+  <div class="col-md-8">
+            <div class="contact-info">
+                <h2>ProductEasy<br>
+                (Online Shopping Website)</h2><br>
+                <h4>LOGIN</h4>
+            </div>
+  </div>
+  <div class="col-md-9">
+ <form method="post" action="">
+      <div class="input-group">
+    <div class="input-group">
+      <label>LOGIN</label>
+      <input type="text" name="email">
+    </div>
+    <div class="input-group">
+      <label>PASSWORD</label>
+      <input type="password" name="password">
+    </div>
+    <div class="input-group">
+      <center><button type="submit" class="btn" name="login">Login</button></center>
+    </div>
+    <p>
+      Create new account <a href="register.php">Sign up</a>
+    </p>
+  </form>
+</div>
+
+</center>
+
+</body>
+</html>
